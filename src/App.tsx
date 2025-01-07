@@ -1,48 +1,28 @@
-// src/App.tsx
-import { Component, createSignal, createEffect } from 'solid-js';
+import { Component, createSignal } from 'solid-js';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { PaletteProvider, usePalette } from './context/PaletteContext';
 import { PaletteControls } from './components/PaletteControls';
 import { SavedPalettes } from './components/SavedPalettes';
 import { HeroImage } from './components/HeroImage';
 import { hexToHSL, hslToHex, calculateTextColor } from './utils/colorUtils';
-import type { Theme, SavedPalette } from './types';
 
+// Wrapper component that provides the theme context
 const App: Component = () => {
-  
+  return (
+    <ThemeProvider>
+      <PaletteProvider>
+        <AppContent />
+      </PaletteProvider>
+    </ThemeProvider>
+  );
+};
+
+// Main application content that uses the theme context
+const AppContent: Component = () => {
+  const { theme, setTheme } = useTheme();
+  const { savePalette } = usePalette();
   const [paletteType, setPaletteType] = createSignal('complementary');
-  const [savedPalettes, setSavedPalettes] = createSignal<SavedPalette[]>([]);
-  const [theme, setTheme] = createSignal<Theme>({
-    primary: '#4A90E2',
-    secondary: '#E29C4A',
-    background: '#FFFFFF',
-    text: '#2A2A2A',
-    muted: '#64748B',
-    accent: '#F5F7FA',
-    border: '#E5E7EB'
-  });
-
   const [baseColor, setBaseColor] = createSignal(theme().primary);
-  // Load saved palettes and theme from localStorage
-  createEffect(() => {
-    const saved = localStorage.getItem('savedPalettes');
-    if (saved) {
-      setSavedPalettes(JSON.parse(saved));
-    }
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setTheme(JSON.parse(savedTheme));
-      setBaseColor(JSON.parse(savedTheme).primary); // Update baseColor when theme is loaded from localStorage
-    }
-  });
-
-  // Save palettes and theme to localStorage when updated
-  createEffect(() => {
-    localStorage.setItem('savedPalettes', JSON.stringify(savedPalettes()));
-  });
-
-  createEffect(() => {
-    localStorage.setItem('theme', JSON.stringify(theme()));
-  });
 
   const generatePalette = () => {
     const [h, s, l] = hexToHSL(baseColor());
@@ -89,18 +69,6 @@ const App: Component = () => {
     });
   };
 
-  const savePalette = () => {
-    setSavedPalettes(prev => [...prev, {
-      id: Date.now(),
-      colors: generatePalette(),
-      timestamp: new Date().toISOString()
-    }]);
-  };
-
-  const removePalette = (id: number) => {
-    setSavedPalettes(prev => prev.filter(p => p.id !== id));
-  };
-
   return (
     <div
       class="min-h-screen w-screen overflow-x-hidden transition-colors duration-200"
@@ -110,7 +78,7 @@ const App: Component = () => {
       }}
     >
       <div class="relative h-[500px] w-full mb-12">
-        <HeroImage theme={theme()} />
+        <HeroImage />
 
         {/* Header Content */}
         <div class="relative z-10 h-full flex flex-col items-center justify-center px-4 w-full">
@@ -142,8 +110,7 @@ const App: Component = () => {
                   paletteType={paletteType()}
                   onBaseColorChange={setBaseColor}
                   onPaletteTypeChange={setPaletteType}
-                  theme={theme()}
-                  generatedColors={generatePalette()} // Pass the generated colors
+                  generatedColors={generatePalette()}
                 />
 
                 <div class="flex gap-4 mt-6">
@@ -158,12 +125,12 @@ const App: Component = () => {
                     Apply to Website
                   </button>
                   <button
-                    class="rounded-lg transition-all duration-200  hover:opacity-90"
+                    class="px-6 py-2 rounded-lg transition-all duration-200 hover:opacity-90"
                     style={{
                       'background-color': theme().secondary,
                       color: calculateTextColor(theme().secondary)
                     }}
-                    onClick={savePalette}
+                    onClick={() => savePalette}
                   >
                     Save Palette
                   </button>
@@ -182,10 +149,7 @@ const App: Component = () => {
               >
                 <h2 class="text-xl font-semibold mb-6">Saved Palettes</h2>
                 <SavedPalettes
-                  palettes={savedPalettes()}
                   onApply={applyTheme}
-                  onRemove={removePalette}
-                  theme={theme()}
                 />
               </div>
             </div>
@@ -194,6 +158,6 @@ const App: Component = () => {
       </div>
     </div>
   );
-}
+};
 
 export default App;

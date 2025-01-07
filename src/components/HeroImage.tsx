@@ -1,11 +1,9 @@
 import { Component } from 'solid-js';
-import type { Theme } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
-type HeroImageProps = {
-  theme: Theme;
-}
+export const HeroImage: Component = () => {
+  const { theme } = useTheme();
 
-export const HeroImage: Component<HeroImageProps> = (props) => {
   return (
     <div class="absolute inset-0 w-full h-[500px]">
       <svg
@@ -15,9 +13,9 @@ export const HeroImage: Component<HeroImageProps> = (props) => {
       >
         <defs>
           <linearGradient id="heroGradient" x1="0" y1="0" x2="100%" y2="100%">
-          <stop offset="40%" stop-color={props.theme.secondary} />
-            <stop offset="0%" stop-color={props.theme.primary} />
-            <stop offset="100%" stop-color={props.theme.muted} />
+            <stop offset="40%" stop-color={theme().secondary} />
+            <stop offset="0%" stop-color={theme().primary} />
+            <stop offset="100%" stop-color={theme().muted} />
           </linearGradient>
           {/* Overlay gradient */}
           <linearGradient id="overlay" x1="0" y1="0" x2="0" y2="1">
