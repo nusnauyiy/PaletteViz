@@ -26,7 +26,7 @@ const defaultTheme: Theme = {
 type ThemeContextType = {
   theme: () => Theme;
   setTheme: (theme: Theme | ((prev: Theme) => Theme)) => void;
-  toggleDarkMode: () => void; // Changed to be a simple function with no parameters
+  toggleDarkMode: () => void;
 };
 
 const ThemeContext = createContext<ThemeContextType>();

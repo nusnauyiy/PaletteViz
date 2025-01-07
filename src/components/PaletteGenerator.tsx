@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, createSignal, createEffect } from 'solid-js';
 import { useTheme } from '../context/ThemeContext';
 import { PaletteControls } from './PaletteControls';
 
@@ -14,6 +14,11 @@ type PaletteGeneratorProps = {
 
 export const PaletteGenerator: Component<PaletteGeneratorProps> = (props) => {
   const { theme } = useTheme();
+  const [currentColors, setCurrentColors] = createSignal(props.generatedColors);
+
+  createEffect(() => {
+    setCurrentColors(props.generatedColors);
+  });
 
   return (
     <div
@@ -29,6 +34,7 @@ export const PaletteGenerator: Component<PaletteGeneratorProps> = (props) => {
         onBaseColorChange={props.onBaseColorChange}
         onPaletteTypeChange={props.onPaletteTypeChange}
         generatedColors={props.generatedColors}
+        onColorsChange={setCurrentColors}
       />
 
       <div class="flex gap-4 mt-6">
@@ -38,7 +44,7 @@ export const PaletteGenerator: Component<PaletteGeneratorProps> = (props) => {
             'background-color': theme().primary,
             color: theme().background
           }}
-          onClick={() => props.onApply(props.generatedColors)}
+          onClick={() => props.onApply(currentColors())}
         >
           Apply to Website
         </button>
@@ -48,7 +54,7 @@ export const PaletteGenerator: Component<PaletteGeneratorProps> = (props) => {
             'background-color': theme().secondary,
             color: theme().background
           }}
-          onClick={() => props.onSave(props.generatedColors)}
+          onClick={() => props.onSave(currentColors())}
         >
           Save Palette
         </button>

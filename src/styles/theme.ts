@@ -1,7 +1,6 @@
 import { Theme } from '../types';
 
 export const createStyles = (theme: Theme) => ({
-  // Common styles that can be reused across components
   container: {
     backgroundColor: theme.background,
     color: theme.text,

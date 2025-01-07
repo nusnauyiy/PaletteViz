@@ -7,7 +7,7 @@ export const ThemeToggle: Component = () => {
 
   return (
     <button
-      onClick={() => toggleDarkMode()} // Fixed: Properly invoke toggleDarkMode
+      onClick={() => toggleDarkMode()}
       class="fixed bottom-6 right-6 p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110"
       style={{
         'background-color': theme().background,

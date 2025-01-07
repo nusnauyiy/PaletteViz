@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, createSignal, createEffect } from 'solid-js';
 import { useTheme } from '../context/ThemeContext';
 import { ColorDisplay } from './ColorDisplay';
 
@@ -8,10 +8,21 @@ type PaletteControlsProps = {
   onBaseColorChange: (color: string) => void;
   onPaletteTypeChange: (type: string) => void;
   generatedColors: string[];
+  onColorsChange?: (colors: string[]) => void;
 }
 
 export const PaletteControls: Component<PaletteControlsProps> = (props) => {
   const { theme } = useTheme();
+  const [currentColors, setCurrentColors] = createSignal(props.generatedColors);
+
+  createEffect(() => {
+    setCurrentColors(props.generatedColors);
+  });
+
+  const handleColorChange = (colors: string[]) => {
+    setCurrentColors(colors);
+    props.onColorsChange?.(colors);
+  };
 
   return (
     <div class="space-y-6">
@@ -46,7 +57,11 @@ export const PaletteControls: Component<PaletteControlsProps> = (props) => {
 
       <div>
         <h2 class="text-xl font-semibold mb-6">Generated Palette</h2>
-        <ColorDisplay colors={props.generatedColors} />
+        <ColorDisplay
+          colors={currentColors()}
+          originalColors={props.generatedColors}
+          onChange={handleColorChange}
+        />
       </div>
     </div>
   );

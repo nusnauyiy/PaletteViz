@@ -19,8 +19,8 @@ export const HeroImage: Component = () => {
           </linearGradient>
           {/* Overlay gradient */}
           <linearGradient id="overlay" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="rgba(0,0,0,0.2)" />
-            <stop offset="100%" stop-color="rgba(0,0,0,0.4)" />
+            <stop offset="0%" stop-color="rgba(0,0,0,0.1)" />
+            <stop offset="100%" stop-color="rgba(0,0,0,0.3)" />
           </linearGradient>
         </defs>
 
