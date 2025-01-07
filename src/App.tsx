@@ -7,7 +7,7 @@ import { hexToHSL, hslToHex, calculateTextColor } from './utils/colorUtils';
 import type { Theme, SavedPalette } from './types';
 
 const App: Component = () => {
-  const [baseColor, setBaseColor] = createSignal('#4A90E2');
+  
   const [paletteType, setPaletteType] = createSignal('complementary');
   const [savedPalettes, setSavedPalettes] = createSignal<SavedPalette[]>([]);
   const [theme, setTheme] = createSignal<Theme>({
@@ -20,6 +20,7 @@ const App: Component = () => {
     border: '#E5E7EB'
   });
 
+  const [baseColor, setBaseColor] = createSignal(theme().primary);
   // Load saved palettes and theme from localStorage
   createEffect(() => {
     const saved = localStorage.getItem('savedPalettes');
@@ -30,6 +31,7 @@ const App: Component = () => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       setTheme(JSON.parse(savedTheme));
+      setBaseColor(JSON.parse(savedTheme).primary); // Update baseColor when theme is loaded from localStorage
     }
   });
 
