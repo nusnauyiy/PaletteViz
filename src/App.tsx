@@ -4,9 +4,11 @@ import { PaletteProvider, usePalette } from './context/PaletteContext';
 import { PaletteControls } from './components/PaletteControls';
 import { SavedPalettes } from './components/SavedPalettes';
 import { HeroImage } from './components/HeroImage';
-import { hexToHSL, hslToHex, calculateTextColor } from './utils/colorUtils';
+import { hexToHSL, hslToHex } from './utils/colorUtils';
+import { ThemeToggle } from './components/ThemeToggle';
+import type { Theme } from './types';
 
-// Wrapper component that provides the theme context
+
 const App: Component = () => {
   return (
     <ThemeProvider>
@@ -17,7 +19,6 @@ const App: Component = () => {
   );
 };
 
-// Main application content that uses the theme context
 const AppContent: Component = () => {
   const { theme, setTheme } = useTheme();
   const { savePalette } = usePalette();
@@ -58,15 +59,18 @@ const AppContent: Component = () => {
     const tertiary = colors[2] || secondary;
     const [h, s] = hexToHSL(primary);
 
-    setTheme({
+    const newTheme: Theme = {
       primary,
       secondary,
-      background: '#FFFFFF',
-      text: '#2A2A2A',
+      background: theme().isDark ? '#1A1A1A' : '#FFFFFF',
+      text: theme().isDark ? '#FFFFFF' : '#2A2A2A',
       muted: tertiary || hslToHex(h, 0.3, 0.6),
-      accent: hslToHex(h, 0.1, 0.98),
-      border: hslToHex(h, 0.1, 0.9)
-    });
+      accent: theme().isDark ? '#2D3748' : '#F5F7FA',
+      border: theme().isDark ? '#374151' : '#E5E7EB',
+      isDark: theme().isDark
+    };
+
+    setTheme(newTheme);
   };
 
   return (
@@ -79,8 +83,6 @@ const AppContent: Component = () => {
     >
       <div class="relative h-[500px] w-full mb-12">
         <HeroImage />
-
-        {/* Header Content */}
         <div class="relative z-10 h-full flex flex-col items-center justify-center px-4 w-full">
           <h1 class="text-6xl font-bold mb-6 text-white">
             Palette Pro
@@ -91,12 +93,9 @@ const AppContent: Component = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
-          {/* Generator and Saved Palettes Section */}
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Generator Section */}
             <div class="lg:col-span-2 space-y-8">
               <div
                 class="p-6 rounded-xl w-full"
@@ -118,7 +117,7 @@ const AppContent: Component = () => {
                     class="px-6 py-2 rounded-lg transition-all duration-200 hover:opacity-90"
                     style={{
                       'background-color': theme().primary,
-                      color: calculateTextColor(theme().primary)
+                      color: theme().background
                     }}
                     onClick={() => applyTheme(generatePalette())}
                   >
@@ -128,9 +127,9 @@ const AppContent: Component = () => {
                     class="px-6 py-2 rounded-lg transition-all duration-200 hover:opacity-90"
                     style={{
                       'background-color': theme().secondary,
-                      color: calculateTextColor(theme().secondary)
+                      color: theme().background
                     }}
-                    onClick={() => savePalette}
+                    onClick={() => savePalette(generatePalette())}
                   >
                     Save Palette
                   </button>
@@ -138,7 +137,6 @@ const AppContent: Component = () => {
               </div>
             </div>
 
-            {/* Saved Palettes Section */}
             <div class="w-full">
               <div
                 class="p-6 rounded-xl sticky top-8 w-full"
@@ -148,14 +146,13 @@ const AppContent: Component = () => {
                 }}
               >
                 <h2 class="text-xl font-semibold mb-6">Saved Palettes</h2>
-                <SavedPalettes
-                  onApply={applyTheme}
-                />
+                <SavedPalettes onApply={applyTheme} />
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ThemeToggle />
     </div>
   );
 };
