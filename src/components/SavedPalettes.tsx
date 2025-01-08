@@ -1,9 +1,8 @@
-// src/components/SavedPalettes.tsx
-import { Component, For } from 'solid-js';
+import { Component, For, createSignal } from 'solid-js';
 import { useTheme } from '../context/ThemeContext';
 import { usePalette } from '../context/PaletteContext';
 import { calculateTextColor } from '../utils/colorUtils';
-import { BiRegularCheckCircle, BiRegularTrash } from 'solid-icons/bi';
+import { BiRegularCheckCircle, BiRegularTrash, BiRegularCopy } from 'solid-icons/bi';
 
 type SavedPalettesProps = {
   onApply: (colors: string[]) => void;
@@ -12,6 +11,13 @@ type SavedPalettesProps = {
 export const SavedPalettes: Component<SavedPalettesProps> = (props) => {
   const { theme } = useTheme();
   const { savedPalettes, removePalette } = usePalette();
+  const [copiedColor, setCopiedColor] = createSignal<string | null>(null);
+
+  const handleColorClick = (color: string) => {
+    navigator.clipboard.writeText(color);
+    setCopiedColor(color);
+    setTimeout(() => setCopiedColor(null), 2000);
+  };
 
   return (
     <div class="space-y-4">
@@ -27,14 +33,25 @@ export const SavedPalettes: Component<SavedPalettesProps> = (props) => {
                 <For each={palette.colors}>
                   {(color) => (
                     <div
-                      class="flex-1"
+                      class="flex-1 relative cursor-pointer"
                       style={{ 'background-color': color }}
-                    />
+                      title={`${color} - Click to copy`}
+                      onClick={() => handleColorClick(color)}
+                    >
+                      {/* Copy Icon */}
+                      <div class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold opacity-0 hover:opacity-100 transition-opacity">
+                        {copiedColor() === color ? (
+                          <BiRegularCheckCircle size={20} />
+                        ) : (
+                          <BiRegularCopy size={20} />
+                        )}
+                      </div>
+                    </div>
                   )}
                 </For>
               </div>
 
-              {/* Buttons and Date - Side by side on larger screens */}
+              {/* Buttons and Dates */}
               <div class="hidden sm:flex items-center gap-2 px-3">
                 <span class="text-sm text-gray-500">
                   {new Date(palette.timestamp).toLocaleDateString()}
