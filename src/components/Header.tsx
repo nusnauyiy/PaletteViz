@@ -1,9 +1,10 @@
+// src/components/Header.tsx
 import { Component } from 'solid-js';
 import { HeroImage } from './HeroImage';
 
 export const Header: Component = () => {
   return (
-    <div class="relative h-[500px] w-full mb-12">
+    <div class="relative h-[500px] w-full mb-6"> {/* Reduced margin-bottom */}
       <HeroImage />
       <div class="relative z-10 h-full flex flex-col items-center justify-center px-4 w-full">
         <h1 class="text-6xl font-bold mb-6 text-white">

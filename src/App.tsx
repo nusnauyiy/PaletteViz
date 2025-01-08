@@ -42,8 +42,8 @@ const AppContent: Component = () => {
 
       <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-3 gap-6">
+            <div class="md:col-span-3 lg:col-span-2">
               <PaletteGenerator
                 baseColor={baseColor()}
                 paletteType={paletteType()}
@@ -54,8 +54,7 @@ const AppContent: Component = () => {
                 onSave={savePalette}
               />
             </div>
-
-            <div class="w-full">
+            <div class="md:col-span-2 lg:col-span-1">
               <SavedPalettesSection onApply={applyTheme} />
             </div>
           </div>

@@ -1,6 +1,8 @@
+// src/components/PaletteGenerator.tsx
 import { Component, createSignal, createEffect } from 'solid-js';
 import { useTheme } from '../context/ThemeContext';
 import { PaletteControls } from './PaletteControls';
+import { BiRegularSave, BiRegularCheckCircle } from 'solid-icons/bi';
 
 type PaletteGeneratorProps = {
   baseColor: string;
@@ -39,24 +41,26 @@ export const PaletteGenerator: Component<PaletteGeneratorProps> = (props) => {
 
       <div class="flex gap-4 mt-6">
         <button
-          class="px-6 py-2 rounded-lg transition-all duration-200 hover:opacity-90"
+          class="px-6 py-2 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90"
           style={{
             'background-color': theme().primary,
             color: theme().background
           }}
           onClick={() => props.onApply(currentColors())}
         >
-          Apply to Website
+          <BiRegularCheckCircle size={20} class="flex-shrink-0" />
+          <span>Apply to Website</span>
         </button>
         <button
-          class="px-6 py-2 rounded-lg transition-all duration-200 hover:opacity-90"
+          class="px-6 py-2 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90"
           style={{
             'background-color': theme().secondary,
             color: theme().background
           }}
           onClick={() => props.onSave(currentColors())}
         >
-          Save Palette
+          <BiRegularSave size={20} class="flex-shrink-0" />
+          <span>Save Palette</span>
         </button>
       </div>
     </div>

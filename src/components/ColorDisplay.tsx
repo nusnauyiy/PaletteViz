@@ -34,7 +34,7 @@ export const ColorDisplay: Component<ColorDisplayProps> = (props) => {
   };
 
   return (
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-3 lg:grid-cols-5 gap-4">
       <For each={currentColors()}>
         {(color, index) => (
           <div 
