@@ -2,7 +2,7 @@ import { Component, For, createSignal } from 'solid-js';
 import { useTheme } from '../context/ThemeContext';
 import { usePalette } from '../context/PaletteContext';
 import { calculateTextColor } from '../utils/colorUtils';
-import { BiRegularCheckCircle, BiRegularTrash, BiRegularCopy } from 'solid-icons/bi';
+import { BiRegularCheckCircle, BiSolidPaintRoll, BiRegularTrash, BiRegularCopy } from 'solid-icons/bi';
 
 type SavedPalettesProps = {
   onApply: (colors: string[]) => void;
@@ -65,7 +65,7 @@ export const SavedPalettes: Component<SavedPalettesProps> = (props) => {
                   onClick={() => props.onApply(palette.colors)}
                   aria-label="Apply Palette"
                 >
-                  <BiRegularCheckCircle size={20} />
+                  <BiSolidPaintRoll size={20} />
                 </button>
                 <button
                   class="p-2 rounded-full transition-all duration-200 hover:opacity-90"
@@ -95,7 +95,7 @@ export const SavedPalettes: Component<SavedPalettesProps> = (props) => {
                     onClick={() => props.onApply(palette.colors)}
                     aria-label="Apply Palette"
                   >
-                    <BiRegularCheckCircle size={20} />
+                    <BiSolidPaintRoll size={20} />
                   </button>
                   <button
                     class="flex-1 py-1.5 rounded-full transition-all duration-200"

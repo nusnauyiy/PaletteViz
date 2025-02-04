@@ -2,7 +2,7 @@
 import { Component, createSignal, createEffect } from 'solid-js';
 import { useTheme } from '../context/ThemeContext';
 import { PaletteControls } from './PaletteControls';
-import { BiRegularSave, BiRegularCheckCircle } from 'solid-icons/bi';
+import { BiRegularSave, BiSolidPaintRoll } from 'solid-icons/bi';
 
 type PaletteGeneratorProps = {
   baseColor: string;
@@ -48,7 +48,7 @@ export const PaletteGenerator: Component<PaletteGeneratorProps> = (props) => {
           }}
           onClick={() => props.onApply(currentColors())}
         >
-          <BiRegularCheckCircle size={20} class="flex-shrink-0" />
+          <BiSolidPaintRoll size={20} class="flex-shrink-0" />
           <span>Apply to Website</span>
         </button>
         <button
