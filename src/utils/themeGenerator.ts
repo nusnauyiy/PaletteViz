@@ -8,7 +8,7 @@ export const generateThemeFromColors = (
   const primary = colors[0];
   const secondary = colors[1] || colors[0];
   const tertiary = colors[2] || secondary;
-  const [h, s] = hexToHSL(primary);
+  const [h] = hexToHSL(primary);
 
   return {
     primary,
